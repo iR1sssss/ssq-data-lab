@@ -4,6 +4,7 @@ on:
   schedule:
     # 北京时间每天 22:30 跑一次；无新开奖时脚本会 no-op。
     - cron: "30 14 * * *"
+
   workflow_dispatch: {}
 
 permissions:
@@ -22,9 +23,11 @@ jobs:
           python-version: "3.12"
 
       - name: Fetch latest SSQ draws
+        continue-on-error: true
         run: python tools/update_ssq.py --count 30
 
       - name: Fetch latest DLT draws
+        continue-on-error: true
         run: python tools/update_dlt.py --count 30
 
       - name: Commit & push if changed
